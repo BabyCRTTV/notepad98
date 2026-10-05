@@ -21,3 +21,6 @@ This repository contains the static download page. Its illustrated theme preview
 [Download source files](Notepad98-source-v1.7.3.zip). No private signing key or password is included.
 
 Independent software, unaffiliated with Microsoft or Apple.
+
+## Browser edition
+[Try Notepad 98 in your browser](browser.html). Includes all 17 themes, font presets, word wrap, local draft recovery, undo/redo, find/replace, local text-file opening (up to 1 MB), and .txt downloads. Notes stay in the browser; there is no note upload or account service. Save downloads a copy and Rename changes the next download name. Browser drafts are separate from the Android app.
