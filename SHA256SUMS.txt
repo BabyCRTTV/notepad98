@@ -1,0 +1,2 @@
+e83fcfb4a2d2461a6043b4ff1d499ee8d871b893be3c407775ff009544e46dac  Notepad98-source-v1.7.2.zip
+cf3bcb9c74962d258725ef902fed32fc2df527f1e1151d1b217b0745fae34acd  Notepad98-v1.7.2.apk
