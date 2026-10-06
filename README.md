@@ -24,3 +24,6 @@ Independent software, unaffiliated with Microsoft or Apple.
 
 ## Browser edition
 [Try Notepad 98 in your browser](browser.html). Includes all 17 themes, font presets, word wrap, local draft recovery, undo/redo, find/replace, local text-file opening (up to 1 MB), and .txt downloads. Notes stay in the browser; there is no note upload or account service. Save downloads a copy and Rename changes the next download name. Browser drafts are separate from the Android app.
+
+## Browser / Windows 1.8
+Open browser.html on the HTTPS site, then choose **Install app** in Edge or Chrome. This is an installable web app (PWA), not a standalone EXE. The editor shell is cached for offline use after the page says Ready for offline use. APK downloads and the landing page require internet. Close all editor windows and reopen online to activate a newly downloaded version. Drafts remain local; download important notes before clearing browser data or uninstalling. Android remains at 1.7.3.
