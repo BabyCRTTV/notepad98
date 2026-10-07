@@ -27,3 +27,6 @@ Independent software, unaffiliated with Microsoft or Apple.
 
 ## Browser / Windows 1.8
 Open browser.html on the HTTPS site, then choose **Install app** in Edge or Chrome. This is an installable web app (PWA), not a standalone EXE. The editor shell is cached for offline use after the page says Ready for offline use. APK downloads and the landing page require internet. Close all editor windows and reopen online to activate a newly downloaded version. Drafts remain local; download important notes before clearing browser data or uninstalling. Android remains at 1.7.3.
+
+## Standalone Windows 1.8.1
+[Download the Windows x64 EXE installer](https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.1/Notepad98-Setup-1.8.1-x64.exe). Includes the editor and runtime; no browser installation or internet connection is needed to write notes. See [Windows build instructions](WINDOWS.md). The installer is unsigned. Browser and Windows drafts are separate.
