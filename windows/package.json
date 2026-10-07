@@ -1,0 +1,19 @@
+{
+  "name": "notepad98-desktop",
+  "version": "1.8.1",
+  "description": "Notepad 98 - a retro offline text editor by 8BitTrade",
+  "author": "8BitTrade",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {"prepare-app": "node prepare.cjs", "dist": "npm run prepare-app && electron-builder --win nsis --x64 --publish never"},
+  "devDependencies": {"electron": "44.7.0", "electron-builder": "26.15.3"},
+  "build": {
+    "appId": "com.eightbittrade.notepad98.desktop",
+    "productName": "Notepad 98",
+    "directories": {"output": "dist"},
+    "files": ["main.cjs", "ui/**/*", "package.json"],
+    "asar": true,
+    "win": {"target": "nsis", "icon": "ui/icon-512.png", "signAndEditExecutable": true},
+    "nsis": {"artifactName": "Notepad98-Setup-${version}-x64.exe", "oneClick": false, "perMachine": false, "allowElevation": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "createStartMenuShortcut": true, "runAfterFinish": false, "deleteAppDataOnUninstall": false}
+  }
+}

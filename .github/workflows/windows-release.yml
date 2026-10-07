@@ -1,0 +1,63 @@
+name: Windows installer
+on:
+  push:
+    branches: [main]
+    paths: ['windows/**', '.github/workflows/windows-release.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+      - name: Install dependencies
+        working-directory: windows
+        run: npm ci
+      - name: Build Windows x64 installer
+        working-directory: windows
+        run: npm run dist
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Install and test the packaged application
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem windows/dist/*-x64.exe | Select-Object -First 1
+          if (!$installer) { throw 'Installer missing' }
+          $destination = Join-Path $env:RUNNER_TEMP 'Notepad98Installed'
+          $install = Start-Process $installer.FullName -ArgumentList @('/S', "/D=$destination") -Wait -PassThru
+          if ($install.ExitCode -ne 0) { throw "Install failed: $($install.ExitCode)" }
+          $exe = Join-Path $destination 'Notepad 98.exe'
+          if (!(Test-Path $exe)) { throw 'Installed executable missing' }
+          $env:NOTEPAD98_SMOKE_OUTPUT = Join-Path $env:RUNNER_TEMP 'smoke-result.json'
+          $test = Start-Process $exe -ArgumentList '--smoke-test' -PassThru
+          if (!$test.WaitForExit(60000)) { $test.Kill(); throw 'App test timed out' }
+          if ($test.ExitCode -ne 0 -or !(Test-Path $env:NOTEPAD98_SMOKE_OUTPUT)) { throw 'Installed app test failed' }
+          Get-Content $env:NOTEPAD98_SMOKE_OUTPUT
+          Copy-Item $env:NOTEPAD98_SMOKE_OUTPUT windows/dist/smoke-result.json
+          $hash = (Get-FileHash $installer.FullName -Algorithm SHA256).Hash.ToLower()
+          "$hash  $($installer.Name)" | Set-Content windows/dist/SHA256SUMS-Windows.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: notepad98-windows
+          path: |
+            windows/dist/*-x64.exe
+            windows/dist/SHA256SUMS-Windows.txt
+            windows/dist/smoke-result.json
+      - name: Publish verified installer
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content windows/package.json | ConvertFrom-Json).version
+          $tag = "windows-v$version"
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) { throw "Release $tag already exists; bump the version to publish a new installer." }
+          gh release create $tag windows/dist/*-x64.exe windows/dist/SHA256SUMS-Windows.txt windows/dist/smoke-result.json --target $env:GITHUB_SHA --title "Notepad 98 for Windows $version" --notes-file windows/RELEASE-NOTES.md
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed' }
