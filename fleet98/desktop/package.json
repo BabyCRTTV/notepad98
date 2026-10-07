@@ -1,0 +1,1 @@
+{"name":"fleet98","productName":"Fleet98","version":"1.0.0","description":"Retro naval strategy by 8BitTrade","author":"8BitTrade","main":"main.cjs","scripts":{"start":"electron .","package:win":"electron-packager . Fleet98 --platform=win32 --arch=x64 --out=../dist --overwrite --asar --prune=true"},"devDependencies":{"electron":"44.6.0","@electron/packager":"20.3.0"}}

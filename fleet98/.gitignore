@@ -1,0 +1,7 @@
+node_modules/
+dist/
+android/build/
+desktop/web/
+*.keystore
+*.jks
+.env
