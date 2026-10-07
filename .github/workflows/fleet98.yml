@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['fleet98/**', '.github/workflows/fleet98.yml']
+    paths: ['fleet98/**', 'web/**', 'android/**', 'desktop/**', 'tests/**', 'package.json', '.github/workflows/fleet98.yml']
 permissions:
   contents: read
 jobs:
@@ -25,6 +25,8 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - run: bash android/build.sh
         working-directory: ${{ steps.project.outputs.dir }}
