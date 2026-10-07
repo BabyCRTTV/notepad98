@@ -1,6 +1,6 @@
 {
   "name": "notepad98-desktop",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "Notepad 98 - a retro offline text editor by 8BitTrade",
   "author": "8BitTrade",
   "private": true,
@@ -38,7 +38,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "runAfterFinish": false,
+      "runAfterFinish": true,
       "deleteAppDataOnUninstall": false,
       "include": "installer.nsh"
     }

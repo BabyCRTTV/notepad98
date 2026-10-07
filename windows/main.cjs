@@ -8,7 +8,7 @@ app.enableSandbox();
 let win;
 app.whenReady().then(async () => {
  session.defaultSession.setPermissionRequestHandler((_wc,_permission,callback)=>callback(false));
- win = new BrowserWindow({width:1100,height:800,minWidth:380,minHeight:440,backgroundColor:'#008080',icon:path.join(__dirname,'ui/icon-512.png'),autoHideMenuBar:true,webPreferences:{nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
+ win = new BrowserWindow({width:520,height:440,minWidth:340,minHeight:280,frame:true,thickFrame:true,resizable:true,maximizable:true,fullscreenable:false,center:true,backgroundColor:'#008080',icon:path.join(__dirname,'ui/icon-512.png'),autoHideMenuBar:true,webPreferences:{nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
  win.setMenu(null);
  win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
  win.webContents.on('will-navigate',event=>event.preventDefault());
@@ -20,6 +20,17 @@ app.whenReady().then(async () => {
  if(smoke) {
    const timer=setTimeout(()=>{console.error('Smoke test timed out');app.exit(1);},30000);
    try {
+     if(!win.isResizable()||!win.isMaximizable())throw Error('Native window resizing disabled');
+     const initial=win.getSize();
+     if(initial[0]!==520||initial[1]!==440)throw Error('Compact startup size incorrect');
+     for(const [width,height] of [[900,700],[340,280],[520,440]]) {
+       win.setSize(width,height);
+       const size=win.getSize();
+       if(size[0]!==width||size[1]!==height)throw Error('Native window resize failed');
+       await win.webContents.executeJavaScript(`new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))`);
+       const fits=await win.webContents.executeJavaScript(`(() => {const r=document.querySelector('.window').getBoundingClientRect();return Math.abs(r.width-innerWidth)<1&&Math.abs(r.height-innerHeight)<1&&document.getElementById('editor').clientHeight>0;})()`);
+       if(!fits)throw Error('Editor does not adapt to window size');
+     }
      const result=await win.webContents.executeJavaScript(`(() => {
        if(document.querySelectorAll('#theme option').length!==17)throw Error('Themes missing');
        const r=document.querySelector('.window').getBoundingClientRect();
@@ -37,7 +48,7 @@ app.whenReady().then(async () => {
      await win.webContents.executeJavaScript(`document.querySelector('[data-action=save]').click()`);
      await downloaded;
      if(fs.readFileSync(path.join(app.getPath('userData'),'smoke.txt'),'utf8')!==result.text)throw Error('Download contents mismatch');
-     fs.writeFileSync(process.env.NOTEPAD98_SMOKE_OUTPUT,JSON.stringify({passed:true,checks:['edge-to-edge editor','desktop wording','17 themes','sandbox','editing','draft and theme recovery','text download'],version:app.getVersion()}));
+     fs.writeFileSync(process.env.NOTEPAD98_SMOKE_OUTPUT,JSON.stringify({passed:true,checks:['compact startup','native resizing larger and smaller','responsive editor','edge-to-edge editor','desktop wording','17 themes','sandbox','editing','draft and theme recovery','text download'],version:app.getVersion()}));
      clearTimeout(timer);app.exit(0);
    }catch(error){console.error(error);clearTimeout(timer);app.exit(1);}
  }

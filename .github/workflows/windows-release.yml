@@ -32,7 +32,7 @@ jobs:
           if (!$installer) { throw 'Installer missing' }
           $destination = Join-Path $env:RUNNER_TEMP 'Notepad98Installed'
           $oldInstaller = Join-Path $env:RUNNER_TEMP 'Notepad98-old.exe'
-          Invoke-WebRequest 'https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.1/Notepad98-Setup-1.8.1-x64.exe' -OutFile $oldInstaller
+          Invoke-WebRequest 'https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.2/Notepad98-Setup-1.8.2-x64.exe' -OutFile $oldInstaller
           $old = Start-Process $oldInstaller -ArgumentList @('/S', "/D=$destination") -Wait -PassThru
           if ($old.ExitCode -ne 0) { throw 'Previous version install failed' }
           $data = Join-Path $env:APPDATA 'notepad98-desktop'
@@ -49,8 +49,8 @@ jobs:
           if (!$test.WaitForExit(60000)) { $test.Kill(); throw 'App test timed out' }
           if ($test.ExitCode -ne 0 -or !(Test-Path $env:NOTEPAD98_SMOKE_OUTPUT)) { throw 'Installed app test failed' }
           $result = Get-Content $env:NOTEPAD98_SMOKE_OUTPUT | ConvertFrom-Json
-          if ($result.version -ne '1.8.2') { throw 'Upgrade did not replace old executable' }
-          $result.checks += 'upgrade from 1.8.1 with user data preserved'
+          if ($result.version -ne '1.8.3') { throw 'Upgrade did not replace old executable' }
+          $result.checks += 'upgrade from 1.8.2 with user data preserved'
           $result | ConvertTo-Json | Set-Content $env:NOTEPAD98_SMOKE_OUTPUT
           Get-Content $env:NOTEPAD98_SMOKE_OUTPUT
           Copy-Item $env:NOTEPAD98_SMOKE_OUTPUT windows/dist/smoke-result.json
