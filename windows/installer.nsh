@@ -1,9 +1,9 @@
+!ifndef BUILD_UNINSTALLER
 !include nsDialogs.nsh
 Var DesktopChoice
 Var DesktopCheckbox
 !macro customPageAfterChangeDir
   Page custom DesktopShortcutPage DesktopShortcutLeave
-!macroend
 Function DesktopShortcutPage
   !insertmacro MUI_HEADER_TEXT "Desktop shortcut" "Choose how to access Notepad 98."
   nsDialogs::Create 1018
@@ -16,6 +16,7 @@ FunctionEnd
 Function DesktopShortcutLeave
   ${NSD_GetState} $DesktopCheckbox $DesktopChoice
 FunctionEnd
+!macroend
 !macro customInstall
   ; Silent installs retain the existing shortcut behavior. Interactive installs honor the checkbox.
   ${IfNot} ${Silent}
@@ -26,3 +27,4 @@ FunctionEnd
     ${EndIf}
   ${EndIf}
 !macroend
+!endif
