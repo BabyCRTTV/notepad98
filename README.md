@@ -28,7 +28,9 @@ Independent software, unaffiliated with Microsoft or Apple.
 ## Browser / Windows 1.8
 Open browser.html on the HTTPS site, then choose **Install app** in Edge or Chrome. This is an installable web app (PWA), not a standalone EXE. The editor shell is cached for offline use after the page says Ready for offline use. APK downloads and the landing page require internet. Close all editor windows and reopen online to activate a newly downloaded version. Drafts remain local; download important notes before clearing browser data or uninstalling. Android remains at 1.7.3.
 
-## Standalone Windows 1.8.2
-[Download the Windows x64 EXE installer](https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.2/Notepad98-Setup-1.8.2-x64.exe). Includes the editor and runtime; no browser installation or internet connection is needed to write notes. See [Windows build instructions](WINDOWS.md). The installer is unsigned. Browser and Windows drafts are separate.
+## Standalone Windows 1.8.3
+[Download the Windows x64 EXE installer](https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.3/Notepad98-Setup-1.8.3-x64.exe). Includes the editor and runtime; no browser installation or internet connection is needed to write notes. See [Windows build instructions](WINDOWS.md). The installer is unsigned. Browser and Windows drafts are separate.
 
 Windows 1.8.2 cleans up the desktop layout and wording, adds a desktop shortcut choice, and supports in-place upgrades from 1.8.1.
+
+Windows 1.8.3 opens at 520 × 440 on each launch. Drag the outer Windows border or a corner to resize, or use Maximize. The minimum size is 340 × 280. The final installer screen offers Run Notepad 98. Upgrades from 1.8.2 retain local app data.
