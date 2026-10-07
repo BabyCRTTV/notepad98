@@ -1,6 +1,6 @@
 # Notepad 98 for Windows
 
-Version 1.8.1 packages the same 17-theme editor as a standalone Electron app. The NSIS installer supports Windows 10/11 x64 (Intel/AMD), installs for the current user, creates shortcuts, and provides an uninstaller. The renderer is sandboxed, has no Node access, and loads bundled files rather than a remote website.
+Version 1.8.2 packages the same 17-theme editor as a standalone Electron app. The NSIS installer supports Windows 10/11 x64 (Intel/AMD), installs for the current user, creates shortcuts, and provides an uninstaller. The renderer is sandboxed, has no Node access, and loads bundled files rather than a remote website.
 
 ## Build
 
@@ -12,7 +12,7 @@ npm ci
 npm run dist
 ```
 
-The installer appears in `windows/dist/Notepad98-Setup-1.8.1-x64.exe`. Build on Windows for the supported release process. The prepare script copies the editor from the repository root and adjusts the desktop labels. Do not edit the generated `ui` directory.
+The installer appears in `windows/dist/Notepad98-Setup-1.8.2-x64.exe`. Build on Windows for the supported release process. The prepare script copies the editor from the repository root and adjusts the desktop labels. Do not edit the generated `ui` directory.
 
 ## Release
 
@@ -23,3 +23,7 @@ The installer is unsigned. Windows may show an unknown-publisher warning. No sig
 ## Notes and files
 
 File → Open reads local UTF-8 text. Save opens a Windows save dialog for a copy. Rename changes the suggested filename; it does not rename an existing file. Important notes should be saved as files. Local drafts are separate from browser and Android drafts. There is no automatic updater; install a later release manually.
+
+## Updating an existing installation
+
+Close Notepad 98 and run the new installer. The existing installation is replaced in place, with local drafts and preferences retained. The installer includes a desktop shortcut checkbox; the Start menu shortcut remains available. Version 1.8.2 was tested installing over 1.8.1.
