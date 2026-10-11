@@ -29,7 +29,7 @@ html=html.replace(/<header class="site-header">[\s\S]*?<\/header>/,'')
  .replace('Try Notepad 98 in your browser. A free retro text editor with 17 themes, local draft recovery, and text-file downloads.','Notepad 98 for Windows: an offline text editor with 17 themes.')
  .replace('Save / Download .txt','Save as…').replaceAll('Rename download','Name saved copy')
  .replace('This names your next download. It does not rename a file already on your device.','Choose the suggested name for your next saved copy. Existing files are not renamed.')
- .replace(/<dialog id="about-dialog">[\s\S]*?<\/dialog>/,`<dialog id="about-dialog"><h2>Notepad 98 for Windows</h2><p>Version 1.8.3 · 8BitTrade</p><p>Pick one of 17 themes under View and start writing.</p><p>Open reads a local UTF-8 text file (up to 1 MB). Save as opens a Windows save dialog. Drafts and preferences are stored locally; save important notes as files.</p><p>Ctrl+S: Save as · Ctrl+F: Find · Ctrl+Z: Undo · Ctrl+Shift+Z: Redo.</p><p>No accounts, ads, analytics, or note uploads. Independent software, unaffiliated with Microsoft or Apple.</p><button data-close>Back to writing</button></dialog>`)
+ .replace(/<dialog id="about-dialog">[\s\S]*?<\/dialog>/,`<dialog id="about-dialog"><h2>Notepad 98 for Windows</h2><p>Version 1.8.4 · 8BitTrade</p><p>Pick one of 17 themes under View and start writing.</p><p>Open reads a local UTF-8 text file (up to 1 MB). Save as opens a Windows save dialog. Drafts and preferences are stored locally; save important notes as files.</p><p>Ctrl+S: Save as · Ctrl+F: Find · Ctrl+Z: Undo · Ctrl+Shift+Z: Redo.</p><p>No accounts, ads, analytics, or note uploads. Independent software, unaffiliated with Microsoft or Apple.</p><button data-close>Back to writing</button></dialog>`)
  .replace('Windows 1.8.1: standalone installer and offline editor.','Windows 1.8.3: compact startup, resizable window, and launch after installation.')
  .replace(/<noscript>[\s\S]*?<\/noscript>/,'')
  .replace('</head>','<link rel="stylesheet" href="desktop.css"></head>');
@@ -41,4 +41,6 @@ js=js.replaceAll('Draft saved in this browser. Download a copy to keep.','Draft 
  .replaceAll('Recovered your previous browser draft.','Recovered your previous draft.')
  .replaceAll('Save downloads a new copy.','Use Save as to save a copy.');
 fs.writeFileSync(path.join(ui,'browser.js'),js);
+html=html.replace('<button data-action="defaults">','<button id="check-updates" type="button">Check for updates…</button><button data-action="defaults">').replace('</body>','<script src="ui-updates.js"></script></body>');
+fs.copyFileSync(path.join(__dirname,'ui-updates.js'),path.join(ui,'ui-updates.js'));
 fs.writeFileSync(path.join(ui,'browser.html'),html);

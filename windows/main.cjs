@@ -1,5 +1,5 @@
 'use strict';
-const {app, BrowserWindow, session} = require('electron');
+const {app, BrowserWindow, session, ipcMain, dialog, net} = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const smoke = process.argv.includes('--smoke-test');
@@ -8,8 +8,9 @@ app.enableSandbox();
 let win;
 app.whenReady().then(async () => {
  session.defaultSession.setPermissionRequestHandler((_wc,_permission,callback)=>callback(false));
- win = new BrowserWindow({width:520,height:440,minWidth:340,minHeight:280,frame:true,thickFrame:true,resizable:true,maximizable:true,fullscreenable:false,center:true,backgroundColor:'#008080',icon:path.join(__dirname,'ui/icon-512.png'),autoHideMenuBar:true,webPreferences:{nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
+ win = new BrowserWindow({width:520,height:440,minWidth:340,minHeight:280,frame:true,thickFrame:true,resizable:true,maximizable:true,fullscreenable:false,center:true,backgroundColor:'#008080',icon:path.join(__dirname,'ui/icon-512.png'),autoHideMenuBar:true,webPreferences:{preload:path.join(__dirname,'preload.cjs'),nodeIntegration:false,contextIsolation:true,sandbox:true,webSecurity:true}});
  win.setMenu(null);
+ require('./update.cjs').register({app,win,ipcMain,dialog,net,spawn:require('node:child_process').spawn});
  win.webContents.setWindowOpenHandler(()=>({action:'deny'}));
  win.webContents.on('will-navigate',event=>event.preventDefault());
  session.defaultSession.on('will-download',(_event,item)=> {
@@ -36,6 +37,7 @@ app.whenReady().then(async () => {
        const r=document.querySelector('.window').getBoundingClientRect();
        if(r.x!==0||r.y!==0||Math.abs(r.width-innerWidth)>1||Math.abs(r.height-innerHeight)>1)throw Error('Editor does not fit window');
        if(/browser|download/i.test(document.body.innerText))throw Error('Web wording remains');
+       if(typeof window.notepadUpdates?.check!=='function'||!document.getElementById('check-updates'))throw Error('Update menu or bridge missing');
        if(typeof require!=='undefined')throw Error('Node exposed');
        const e=document.getElementById('editor');e.value='Desktop smoke test\\nNotepad 98';e.dispatchEvent(new Event('input'));
        const t=document.getElementById('theme');t.value='13';t.dispatchEvent(new Event('change'));
@@ -48,7 +50,7 @@ app.whenReady().then(async () => {
      await win.webContents.executeJavaScript(`document.querySelector('[data-action=save]').click()`);
      await downloaded;
      if(fs.readFileSync(path.join(app.getPath('userData'),'smoke.txt'),'utf8')!==result.text)throw Error('Download contents mismatch');
-     fs.writeFileSync(process.env.NOTEPAD98_SMOKE_OUTPUT,JSON.stringify({passed:true,checks:['compact startup','native resizing larger and smaller','responsive editor','edge-to-edge editor','desktop wording','17 themes','sandbox','editing','draft and theme recovery','text download'],version:app.getVersion()}));
+     fs.writeFileSync(process.env.NOTEPAD98_SMOKE_OUTPUT,JSON.stringify({passed:true,checks:['update menu and sandboxed bridge','compact startup','native resizing larger and smaller','responsive editor','edge-to-edge editor','desktop wording','17 themes','sandbox','editing','draft and theme recovery','text download'],version:app.getVersion()}));
      clearTimeout(timer);app.exit(0);
    }catch(error){console.error(error);clearTimeout(timer);app.exit(1);}
  }

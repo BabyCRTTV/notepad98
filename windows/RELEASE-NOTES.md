@@ -1,8 +1,7 @@
-Notepad 98 for Windows 1.8.3
+Notepad 98 for Windows 1.8.4
 
-- Opens in a compact 520 × 440 window on each launch.
-- Explicitly enables the standard Windows resize border and maximize control, with a smaller minimum size.
-- Added the option to launch Notepad 98 on the installer's final screen.
-- Keeps the desktop shortcut choice and in-place upgrades.
+- Added Help → Check for updates.
+- Offers a newer release, verifies the installer download, and opens it after confirmation.
+- Keeps the compact, resizable window and installer shortcut/launch options.
 
-Drag the outside window edge or corner to resize. Windows display scaling affects the physical size. Windows x64; installer unsigned.
+Update checks only run when requested. Notes are never uploaded. Windows x64; installer unsigned.

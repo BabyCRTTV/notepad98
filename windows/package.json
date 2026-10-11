@@ -1,13 +1,14 @@
 {
   "name": "notepad98-desktop",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Notepad 98 - a retro offline text editor by 8BitTrade",
   "author": "8BitTrade",
   "private": true,
   "main": "main.cjs",
   "scripts": {
     "prepare-app": "node prepare.cjs",
-    "dist": "npm run prepare-app && electron-builder --win nsis --x64 --publish never"
+    "dist": "npm run prepare-app && electron-builder --win nsis --x64 --publish never",
+    "test": "node --test update.test.cjs"
   },
   "devDependencies": {
     "electron": "44.7.0",
@@ -22,7 +23,9 @@
     "files": [
       "main.cjs",
       "ui/**/*",
-      "package.json"
+      "package.json",
+      "preload.cjs",
+      "update.cjs"
     ],
     "asar": true,
     "win": {
