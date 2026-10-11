@@ -1,6 +1,6 @@
 # Notepad 98 for Windows
 
-Version 1.8.3 packages the same 17-theme editor as a standalone Electron app. The NSIS installer supports Windows 10/11 x64 (Intel/AMD), installs for the current user, creates shortcuts, and provides an uninstaller. The renderer is sandboxed, has no Node access, and loads bundled files rather than a remote website.
+Version 1.8.4 packages the same 17-theme editor as a standalone Electron app. The NSIS installer supports Windows 10/11 x64 (Intel/AMD), installs for the current user, creates shortcuts, and provides an uninstaller. The renderer is sandboxed, has no Node access, and loads bundled files rather than a remote website.
 
 ## Build
 
@@ -12,7 +12,7 @@ npm ci
 npm run dist
 ```
 
-The installer appears in `windows/dist/Notepad98-Setup-1.8.3-x64.exe`. Build on Windows for the supported release process. The prepare script copies the editor from the repository root and adjusts the desktop labels. Do not edit the generated `ui` directory.
+The installer appears in `windows/dist/Notepad98-Setup-1.8.4-x64.exe`. Build on Windows for the supported release process. The prepare script copies the editor from the repository root and adjusts the desktop labels. Do not edit the generated `ui` directory.
 
 ## Release
 
@@ -22,7 +22,7 @@ The installer is unsigned. Windows may show an unknown-publisher warning. No sig
 
 ## Notes and files
 
-File → Open reads local UTF-8 text. Save opens a Windows save dialog for a copy. Rename changes the suggested filename; it does not rename an existing file. Important notes should be saved as files. Local drafts are separate from browser and Android drafts. There is no automatic updater; install a later release manually.
+File → Open reads local UTF-8 text. Save opens a Windows save dialog for a copy. Rename changes the suggested filename; it does not rename an existing file. Important notes should be saved as files. Local drafts are separate from browser and Android drafts. Help → Check for updates checks the official version feed on request. It offers newer versions, verifies the installer checksum, and asks before closing the app and opening the installer. Editing remains offline; no notes are uploaded. The release workflow updates the Windows feed after publishing a verified installer.
 
 ## Updating an existing installation
 

@@ -1,0 +1,35 @@
+name: Android source checks
+on:
+  push:
+    branches: [main]
+    paths: ['android/**', '.github/workflows/android-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Compile Android source
+        working-directory: android
+        shell: bash
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'
+          export ANDROID_SDK_ROOT="$ANDROID_HOME"
+          bash build.sh --unsigned
+      - name: Test update download integrity
+        shell: bash
+        run: |
+          mkdir -p android/tests/classes
+          javac -cp "$ANDROID_HOME/platforms/android-35/android.jar:android/build/classes" -d android/tests/classes android/tests/com/eightbittrade/notepad98/UpdateChecks.java
+          java -cp "$ANDROID_HOME/platforms/android-35/android.jar:android/build/classes:android/tests/classes" com.eightbittrade.notepad98.UpdateChecks
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-unsigned-check-only
+          path: android/build/aligned.apk
