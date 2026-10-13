@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "windows": {
-    "notes": "Check for updates is now available under Help.",
-    "version": "1.8.4",
-    "url": "https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.4/Notepad98-Setup-1.8.4-x64.exe",
-    "sha256": "371e10f0de4acec45ba30cf6a2d0f22202a25dd560ae5ca47c0367ee15eaa94d"
+    "url": "https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.5/Notepad98-Setup-1.8.5-x64.exe",
+    "sha256": "b7c180cf169fd3ba3ca3855fc219cd67824a04e9e1de2ea93cb50bdb40473e32",
+    "version": "1.8.5",
+    "notes": "Added Macintosh Classic Dark and more Serif font sizes."
   },
   "android": {
     "version": "1.7.4",
