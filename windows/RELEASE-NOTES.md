@@ -1,7 +1,8 @@
-Notepad 98 for Windows 1.8.4
+Notepad 98 for Windows 1.8.5
 
-- Added Help → Check for updates.
-- Offers a newer release, verifies the installer download, and opens it after confirmation.
-- Keeps the compact, resizable window and installer shortcut/launch options.
+- Added Macintosh Classic Dark.
+- Added Serif 14, 16, 20, and 24 alongside Serif 18.
+- Green Terminal is unchanged.
+- Saved themes/fonts and Check for updates continue to work.
 
-Update checks only run when requested. Notes are never uploaded. Windows x64; installer unsigned.
+Windows x64. Installer unsigned.

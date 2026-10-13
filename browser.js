@@ -19,10 +19,11 @@ const themes=[
 ['Green Terminal','#031006','#000','#55ff66','linear-gradient(#08270d,#031006)','#55ff66'],
 ['White Terminal','#101010','#000','#eee','linear-gradient(#242424,#101010)','#eee'],
 ['Windows 11','#53677d','#f3f3f3','#30343b','linear-gradient(90deg,#e8eef8,#edf1f7)','#202020'],
-['Apple Liquid Glass','#778dac','#e8e6f4','#293c58','linear-gradient(120deg,#effaffdd,#cce9f9bb,#e5ddfacc,#eafff9dd)','#26334d']
+['Apple Liquid Glass','#778dac','#e8e6f4','#293c58','linear-gradient(120deg,#effaffdd,#cce9f9bb,#e5ddfacc,#eafff9dd)','#26334d'],
+['Macintosh Classic Dark','#292929','#3c3c3c','#eee','repeating-linear-gradient(#3c3c3c 0 3px,#878787 3px 4px)','#eee']
 ];
 let name='Untitled.txt',saved='',theme=0,font=1,history=[],at=0,lastEdit=0,recoveryTimer,storageOK=true;
-const fonts=[['monospace',14],['monospace',16],['monospace',20],['Arial, sans-serif',16],['Georgia, serif',18]];
+const fonts=[['monospace',14],['monospace',16],['monospace',20],['Arial, sans-serif',16],['Georgia, serif',18],['Georgia, serif',14],['Georgia, serif',16],['Georgia, serif',20],['Georgia, serif',24]];
 const tell=s=>$('notice').textContent=s;
 const dirty=()=>editor.value!==saved;
 const cleanName=s=>{s=s.trim().replace(/[\\/:*?"<>|\x00-\x1f]/g,'_').slice(0,116);return !s?'Untitled.txt':/\.txt$/i.test(s)?s:s+'.txt';};
@@ -52,7 +53,7 @@ function resetHistory(){history=[{text:editor.value,start:0,end:0}];at=0;lastEdi
 function undo(step){const next=at+step;if(next<0||next>=history.length)return;at=next;const item=history[at];editor.value=item.text;editor.focus();editor.setSelectionRange(item.start,item.end);lastEdit=0;update();persist();}
 function applyTheme(){
  const t=themes[theme];document.body.dataset.theme=theme;
- const values={'--desk':t[1],'--chrome':t[2],'--ink':t[3],'--title':t[4],'--title-ink':t[5],'--paper':theme>=12&&theme<=14?'#000':'#fff','--text':theme>=12&&theme<=14?t[3]:'#111','--radius':theme>=15?'10px':theme===1||theme===3||theme===5||theme===6||theme===8?'5px':'0px','--selection':theme===12?'#664600':theme===13?'#184d20':theme===14?'#505050':'#b5d5ff'};
+ const values={'--desk':t[1],'--chrome':t[2],'--ink':t[3],'--title':t[4],'--title-ink':t[5],'--paper':theme===17?'#191919':theme>=12&&theme<=14?'#000':'#fff','--text':theme===17||theme>=12&&theme<=14?t[3]:'#111','--radius':theme===17?'0px':theme>=15?'10px':theme===1||theme===3||theme===5||theme===6||theme===8?'5px':'0px','--selection':theme===17?'#686868':theme===12?'#664600':theme===13?'#184d20':theme===14?'#505050':'#b5d5ff'};
  for(const [p,v] of Object.entries(values))document.documentElement.style.setProperty(p,v);
  $('theme').value=theme;
 }

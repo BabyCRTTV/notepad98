@@ -35,7 +35,7 @@ jobs:
           if (!$installer) { throw 'Installer missing' }
           $destination = Join-Path $env:RUNNER_TEMP 'Notepad98Installed'
           $oldInstaller = Join-Path $env:RUNNER_TEMP 'Notepad98-old.exe'
-          Invoke-WebRequest 'https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.3/Notepad98-Setup-1.8.3-x64.exe' -OutFile $oldInstaller
+          Invoke-WebRequest 'https://github.com/BabyCRTTV/notepad98/releases/download/windows-v1.8.4/Notepad98-Setup-1.8.4-x64.exe' -OutFile $oldInstaller
           $old = Start-Process $oldInstaller -ArgumentList @('/S', "/D=$destination") -Wait -PassThru
           if ($old.ExitCode -ne 0) { throw 'Previous version install failed' }
           $data = Join-Path $env:APPDATA 'notepad98-desktop'
@@ -52,8 +52,8 @@ jobs:
           if (!$test.WaitForExit(60000)) { $test.Kill(); throw 'App test timed out' }
           if ($test.ExitCode -ne 0 -or !(Test-Path $env:NOTEPAD98_SMOKE_OUTPUT)) { throw 'Installed app test failed' }
           $result = Get-Content $env:NOTEPAD98_SMOKE_OUTPUT | ConvertFrom-Json
-          if ($result.version -ne '1.8.4') { throw 'Upgrade did not replace old executable' }
-          $result.checks += 'upgrade from 1.8.3 with user data preserved'
+          if ($result.version -ne '1.8.5') { throw 'Upgrade did not replace old executable' }
+          $result.checks += 'upgrade from 1.8.4 with user data preserved'
           $result | ConvertTo-Json | Set-Content $env:NOTEPAD98_SMOKE_OUTPUT
           Get-Content $env:NOTEPAD98_SMOKE_OUTPUT
           Copy-Item $env:NOTEPAD98_SMOKE_OUTPUT windows/dist/smoke-result.json
@@ -88,7 +88,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Could not read update feed' }
           $feed = [Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($current.content)) | ConvertFrom-Json
           $installer = Get-ChildItem windows/dist/*-x64.exe | Select-Object -First 1
-          $feed.windows = @{version=$version; url="https://github.com/BabyCRTTV/notepad98/releases/download/windows-v$version/$($installer.Name)"; sha256=(Get-FileHash $installer.FullName -Algorithm SHA256).Hash.ToLower(); notes='Check for updates is now available under Help.'}
+          $feed.windows = @{version=$version; url="https://github.com/BabyCRTTV/notepad98/releases/download/windows-v$version/$($installer.Name)"; sha256=(Get-FileHash $installer.FullName -Algorithm SHA256).Hash.ToLower(); notes='Added Macintosh Classic Dark and more Serif font sizes.'}
           $content = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes(($feed | ConvertTo-Json -Depth 8)))
           @{message="Publish Windows $version update feed"; sha=$current.sha; content=$content} | ConvertTo-Json | Set-Content -Encoding utf8 feed-request.json
           gh api --method PUT repos/BabyCRTTV/notepad98/contents/updates.json --input feed-request.json
