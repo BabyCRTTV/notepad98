@@ -19,13 +19,13 @@ import java.util.ArrayDeque;
 
 public class MainActivity extends Activity {
     UpdateManager updater;
-    static final String[] THEMES={"Windows 98","Windows XP","Windows Classic","Windows Vista","Windows 3.1","Windows XP Olive","Windows XP Silver","Macintosh Classic","XP Start Green","Macintosh Rainbow","Windows XP Zune","Windows Classic Desert","Amber Terminal","Green Terminal","White Terminal","Windows 11","Apple Liquid Glass"};
+    static final String[] THEMES={"Windows 98","Windows XP","Windows Classic","Windows Vista","Windows 3.1","Windows XP Olive","Windows XP Silver","Macintosh Classic","XP Start Green","Macintosh Rainbow","Windows XP Zune","Windows Classic Desert","Amber Terminal","Green Terminal","White Terminal","Windows 11","Apple Liquid Glass","Macintosh Classic Dark"};
     final int GRAY=0xffc0c0c0, NAVY=0xff000080;
     EditText editor; TextView title,status; LinearLayout root, paper, titlebar, menubar; TextView closeButton; int theme=0;
     Uri file; String name="Untitled", saved=""; boolean changing=false,wrap=true;
     ArrayDeque<String> undo=new ArrayDeque<>(); Handler handler=new Handler(); Runnable recovery;
     int fontChoice=1;
-    static final String[] FONT_NAMES={"Monospace 14","Monospace 16","Monospace 20","Sans serif 16","Serif 18"};
+    static final String[] FONT_NAMES={"Monospace 14","Monospace 16","Monospace 20","Sans serif 16","Serif 18","Serif 14","Serif 16","Serif 20","Serif 24"};
     int size=16; String font="monospace"; Runnable afterSave;
     int dp(int n){return (int)(getResources().getDisplayMetrics().density*n+.5f);}
     class Edge extends Drawable {
@@ -183,11 +183,25 @@ public class MainActivity extends Activity {
             status.setBackground(new GlassPanel(12));status.setTextColor(0xff354660);
             getWindow().setStatusBarColor(0xffc9eaff);getWindow().setNavigationBarColor(0xffd2edf0);
         }
+        if(n==17){
+            int chromeDark=0xff3c3c3c,inkDark=0xffeeeeee,edgeDark=0xff878787;
+            root.setBackground(gradient(new int[]{chromeDark,chromeDark},true,0,edgeDark));
+            titlebar.setBackground(gradient(new int[]{chromeDark,chromeDark},true,0,edgeDark));
+            title.setBackground(new MacTitle(true));title.setTextColor(inkDark);title.setShadowLayer(0,0,0,0);title.setGravity(Gravity.CENTER);title.setTypeface(Typeface.create("sans-serif-condensed",Typeface.BOLD));
+            titlebar.removeView(closeButton);titlebar.addView(closeButton,0,new LinearLayout.LayoutParams(dp(34),dp(32)));
+            closeButton.setText("□");closeButton.setTextColor(inkDark);closeButton.setBackground(gradient(new int[]{chromeDark,chromeDark},true,0,edgeDark));
+            menubar.setBackground(gradient(new int[]{chromeDark,chromeDark},true,0,edgeDark));
+            for(int i=0;i<menubar.getChildCount();i++){TextView item=(TextView)menubar.getChildAt(i);item.setBackgroundColor(Color.TRANSPARENT);item.setTextColor(inkDark);}
+            paper.setBackground(gradient(new int[]{0xff191919,0xff191919},true,0,edgeDark));
+            editor.setBackgroundColor(0xff191919);editor.setTextColor(inkDark);editor.setHighlightColor(0xff686868);
+            status.setBackground(gradient(new int[]{chromeDark,chromeDark},true,0,edgeDark));status.setTextColor(inkDark);
+            getWindow().setStatusBarColor(chromeDark);getWindow().setNavigationBarColor(chromeDark);
+        }
         int systemUi=getWindow().getDecorView().getSystemUiVisibility();
         int lightBars=View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-        getWindow().getDecorView().setSystemUiVisibility(n>=15?systemUi|lightBars:systemUi&~lightBars);
+        getWindow().getDecorView().setSystemUiVisibility((n==15||n==16)?systemUi|lightBars:systemUi&~lightBars);
         if(Build.VERSION.SDK_INT>=29){
-            int accent=isTerminal(n)?terminalColor(n):0xff006da5;
+            int accent=isTerminal(n)?terminalColor(n):n==17?0xffeeeeee:0xff006da5;
             GradientDrawable cursor=gradient(new int[]{accent,accent},true,0,0);cursor.setSize(dp(2),dp(size+5));editor.setTextCursorDrawable(cursor);
             Drawable[] handles={editor.getTextSelectHandle(),editor.getTextSelectHandleLeft(),editor.getTextSelectHandleRight()};
             for(Drawable handle:handles)if(handle!=null)handle.mutate().setTint(accent);
@@ -207,13 +221,14 @@ public class MainActivity extends Activity {
         public void setAlpha(int alpha){}public void setColorFilter(android.graphics.ColorFilter f){}public int getOpacity(){return android.graphics.PixelFormat.TRANSLUCENT;}
     }
     class MacTitle extends Drawable {
+        final boolean dark;MacTitle(){this(false);}MacTitle(boolean dark){this.dark=dark;}
         Paint p=new Paint();
         public void draw(Canvas c){
-            android.graphics.Rect r=getBounds();p.setColor(Color.WHITE);c.drawRect(r,p);
-            p.setColor(Color.BLACK);p.setStrokeWidth(dp(1));
+            android.graphics.Rect r=getBounds();p.setColor(dark?0xff3c3c3c:Color.WHITE);c.drawRect(r,p);
+            p.setColor(dark?0xff878787:Color.BLACK);p.setStrokeWidth(dp(1));
             for(int y=r.top+dp(5);y<r.bottom-dp(4);y+=dp(4))c.drawLine(r.left+dp(3),y,r.right-dp(3),y,p);
             float width=Math.min(r.width()-dp(10),title.getPaint().measureText(title.getText().toString())+dp(16));
-            p.setColor(Color.WHITE);c.drawRect(r.exactCenterX()-width/2,r.top,r.exactCenterX()+width/2,r.bottom,p);
+            p.setColor(dark?0xff3c3c3c:Color.WHITE);c.drawRect(r.exactCenterX()-width/2,r.top,r.exactCenterX()+width/2,r.bottom,p);
         }
         public void setAlpha(int a){}public void setColorFilter(android.graphics.ColorFilter f){}public int getOpacity(){return android.graphics.PixelFormat.OPAQUE;}
     }
@@ -229,8 +244,8 @@ public class MainActivity extends Activity {
         }
         public void setAlpha(int a){}public void setColorFilter(android.graphics.ColorFilter f){}public int getOpacity(){return android.graphics.PixelFormat.OPAQUE;}
     }
-    void update(){String s=editor.getText().toString();title.setText("▤  "+name+(s.equals(saved)?"":" *")+" - Notepad");int pos=Math.max(0,editor.getSelectionStart()),line=1,col=1;for(int i=0;i<Math.min(pos,s.length());i++){if(s.charAt(i)=='\n'){line++;col=1;}else col++;}if((theme==7||theme==9)&&title.getBackground()!=null)title.getBackground().invalidateSelf();status.setText("Ln "+line+", Col "+col+"    |    "+s.length()+" characters");}
-    void menu(View anchor,String which){PopupMenu m=new PopupMenu((theme==10||isTerminal(theme))?new ContextThemeWrapper(this,android.R.style.Theme_Material):this,anchor);String[] items;
+    void update(){String s=editor.getText().toString();title.setText("▤  "+name+(s.equals(saved)?"":" *")+" - Notepad");int pos=Math.max(0,editor.getSelectionStart()),line=1,col=1;for(int i=0;i<Math.min(pos,s.length());i++){if(s.charAt(i)=='\n'){line++;col=1;}else col++;}if((theme==7||theme==9||theme==17)&&title.getBackground()!=null)title.getBackground().invalidateSelf();status.setText("Ln "+line+", Col "+col+"    |    "+s.length()+" characters");}
+    void menu(View anchor,String which){PopupMenu m=new PopupMenu((theme==10||theme==17||isTerminal(theme))?new ContextThemeWrapper(this,android.R.style.Theme_Material):this,anchor);String[] items;
         switch(which){case "File":items=new String[]{"New","Open…","Save","Save As…","Rename…"};break;case "Edit":items=new String[]{"Undo","Cut","Copy","Paste","Select All","Find…","Replace…"};break;case "Format":items=new String[]{(wrap?"✓ ":"")+"Word Wrap","Font…","Select Text","Select All"};break;case "View":items=new String[]{"Status Bar","Theme…"};break;default:items=new String[]{"Check for updates…","Restore Defaults","Changelog","About Notepad 98"};}
         for(String s:items){if(isTerminal(theme)){SpannableString amberLabel=new SpannableString(s);amberLabel.setSpan(new android.text.style.ForegroundColorSpan(terminalColor(theme)),0,s.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);m.getMenu().add(amberLabel);}else m.getMenu().add(s);}m.setOnMenuItemClickListener(i->{action(i.getTitle().toString());return true;});m.show();}
     void action(String s){switch(s){case "New":confirm(()->{file=null;name="Untitled";saved="";setText("");undo.clear();recovery.run();});break;
@@ -241,16 +256,17 @@ public class MainActivity extends Activity {
         case "Cut":editor.onTextContextMenuItem(android.R.id.cut);break;case "Copy":editor.onTextContextMenuItem(android.R.id.copy);break;case "Paste":editor.onTextContextMenuItem(android.R.id.paste);break;case "Select All":editor.requestFocus();editor.onTextContextMenuItem(android.R.id.selectAll);break;
         case "Find…":find(false);break;case "Replace…":find(true);break;
         case "Word Wrap":case "✓ Word Wrap":wrap=!wrap;editor.setHorizontallyScrolling(!wrap);break;
-        case "Font…":new AlertDialog.Builder(this).setTitle("Font").setSingleChoiceItems(FONT_NAMES,fontChoice,(d,n)->{applyFont(n);getSharedPreferences("draft",0).edit().putInt("fontChoice",n).apply();d.dismiss();}).setNegativeButton("Cancel",null).show();break;
+        case "Font…":showFonts();break;
         case "Select Text":selectText();break;
         case "Theme…":new AlertDialog.Builder(this).setTitle("Theme").setSingleChoiceItems(THEMES,theme,(d,n)->{applyTheme(n);getSharedPreferences("draft",0).edit().putInt("theme",n).apply();d.dismiss();}).setNegativeButton("Cancel",null).show();break;
         case "Check for updates…":updater.check();break;
         case "Changelog":showChangelog();break;
         case "Restore Defaults":applyTheme(0);applyFont(1);getSharedPreferences("draft",0).edit().putInt("theme",0).putInt("fontChoice",1).apply();Toast.makeText(this,"Restored Windows 98 and Monospace 16",Toast.LENGTH_SHORT).show();break;
         case "Status Bar":status.setVisibility(status.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);break;
-        default:new AlertDialog.Builder(this).setTitle("Notepad 98").setMessage("Version 1.7.4\n8BitTrade\n\nA little plain-text editor with a classic Windows look.\n\nNo ads. No analytics. No accounts. Internet is used only when you check for updates.\n\nDrafts recover automatically on this device. Save creates a portable UTF-8 .txt file.\n\nAn independent app, unaffiliated with Microsoft or Apple.").setPositiveButton("OK",null).show();}}
+        default:new AlertDialog.Builder(this).setTitle("Notepad 98").setMessage("Version 1.7.5\n8BitTrade\n\nA little plain-text editor with a classic Windows look.\n\nNo ads. No analytics. No accounts. Internet is used only when you check for updates.\n\nDrafts recover automatically on this device. Save creates a portable UTF-8 .txt file.\n\nAn independent app, unaffiliated with Microsoft or Apple.").setPositiveButton("OK",null).show();}}
     void showChangelog(){
         String[][] history={
+            {"1.7.5", "Added Macintosh Classic Dark and Serif font sizes 14, 16, 20, and 24."},
             {"1.7.4", "Added Check for updates under Help. New permanent signing key: uninstall the older app once after saving your notes."},
             {"1.7.3", "Slightly increased the title bar height so letters like g display fully in every theme."},
             {"1.7.2", "Basic revision."},
@@ -276,9 +292,14 @@ public class MainActivity extends Activity {
         LinearLayout container=new LinearLayout(this);container.addView(scroll,new LinearLayout.LayoutParams(-1,Math.min(dp(420),getResources().getDisplayMetrics().heightPixels/2)));
         new AlertDialog.Builder(this).setTitle("Changelog").setView(container).setPositiveButton("Close",null).show();
     }
+    void showFonts(){
+        final int[] order={0,1,2,3,5,6,4,7,8};String[] labels=new String[order.length];int checked=0;
+        for(int i=0;i<order.length;i++){labels[i]=FONT_NAMES[order[i]];if(order[i]==fontChoice)checked=i;}
+        new AlertDialog.Builder(this).setTitle("Font").setSingleChoiceItems(labels,checked,(d,n)->{applyFont(order[n]);getSharedPreferences("draft",0).edit().putInt("fontChoice",fontChoice).apply();d.dismiss();}).setNegativeButton("Cancel",null).show();
+    }
     void applyFont(int choice){
         fontChoice=choice>=0&&choice<FONT_NAMES.length?choice:1;
-        size=new int[]{14,16,20,16,18}[fontChoice];font=new String[]{"monospace","monospace","monospace","sans-serif","serif"}[fontChoice];
+        size=new int[]{14,16,20,16,18,14,16,20,24}[fontChoice];font=new String[]{"monospace","monospace","monospace","sans-serif","serif","serif","serif","serif","serif"}[fontChoice];
         editor.setTypeface(Typeface.create(font,Typeface.NORMAL));editor.setTextSize(size);
     }
     void selectText(){

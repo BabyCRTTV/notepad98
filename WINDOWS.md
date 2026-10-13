@@ -1,6 +1,6 @@
 # Notepad 98 for Windows
 
-Version 1.8.4 packages the same 17-theme editor as a standalone Electron app. The NSIS installer supports Windows 10/11 x64 (Intel/AMD), installs for the current user, creates shortcuts, and provides an uninstaller. The renderer is sandboxed, has no Node access, and loads bundled files rather than a remote website.
+Version 1.8.5 packages the same 18-theme editor as a standalone Electron app. The NSIS installer supports Windows 10/11 x64 (Intel/AMD), installs for the current user, creates shortcuts, and provides an uninstaller. The renderer is sandboxed, has no Node access, and loads bundled files rather than a remote website.
 
 ## Build
 
@@ -12,7 +12,7 @@ npm ci
 npm run dist
 ```
 
-The installer appears in `windows/dist/Notepad98-Setup-1.8.4-x64.exe`. Build on Windows for the supported release process. The prepare script copies the editor from the repository root and adjusts the desktop labels. Do not edit the generated `ui` directory.
+The installer appears in `windows/dist/Notepad98-Setup-1.8.5-x64.exe`. Build on Windows for the supported release process. The prepare script copies the editor from the repository root and adjusts the desktop labels. Do not edit the generated `ui` directory.
 
 ## Release
 
@@ -29,3 +29,5 @@ File → Open reads local UTF-8 text. Save opens a Windows save dialog for a cop
 Close Notepad 98 and run the new installer. The existing installation is replaced in place, with local drafts and preferences retained. The installer includes a desktop shortcut checkbox; the Start menu shortcut remains available. Version 1.8.2 was tested installing over 1.8.1.
 
 Windows 1.8.3 opens at 520 × 440 on each launch. Drag the outer Windows border or a corner to resize, or use Maximize. The minimum size is 340 × 280. The final installer screen offers Run Notepad 98. Upgrades from 1.8.2 retain local app data.
+
+Version 1.8.5 adds Macintosh Classic Dark and Serif 14, 16, 20, and 24. Existing theme/font selections keep their IDs; Green Terminal is unchanged.

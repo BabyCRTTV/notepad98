@@ -7,10 +7,10 @@
     "notes": "Added Macintosh Classic Dark and more Serif font sizes."
   },
   "android": {
-    "version": "1.7.4",
-    "versionCode": 14,
-    "url": "https://babycrttv.github.io/notepad98/Notepad98-v1.7.4.apk",
-    "sha256": "09497de719d8c385aebd51bc40211b6ee5128fc2dc2e905147aae0abc7a22486",
-    "notes": "Added Check for updates under Help."
+    "version": "1.7.5",
+    "versionCode": 15,
+    "url": "https://babycrttv.github.io/notepad98/Notepad98-v1.7.5.apk",
+    "sha256": "420a7aa5d480c0e39b74bcae6ddb246b2b6fe3d7ed1e30485bcf9214b688efe2",
+    "notes": "Added Macintosh Classic Dark and Serif 14, 16, 20, and 24. Green Terminal is unchanged."
   }
 }

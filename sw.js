@@ -1,5 +1,5 @@
  'use strict';
-const CACHE = 'notepad98-shell-1.9.0';
+const CACHE = 'notepad98-shell-1.9.1';
 const FILES = ['browser.html','browser.css','browser.js','install.js','manifest.webmanifest','icon.svg','icon-192.png','icon-512.png'];
 const URLS = FILES.map(file => new URL(file, self.registration.scope).href);
 self.addEventListener('install', event => {
