@@ -43,3 +43,9 @@ Windows 1.8.4 and Android 1.7.4 include Help → Check for updates. Updates are 
 ## Latest theme and font update
 
 Android 1.7.5, Windows 1.8.5, and Browser 1.9 add Macintosh Classic Dark and Serif sizes 14, 16, 20, and 24 alongside 18. Green Terminal is unchanged. Saved theme/font IDs remain compatible. For installed browser apps, close all editor windows and reopen online to activate the new cached shell.
+
+## Public site counters
+
+The landing page shows visits and download clicks, starting October 14, 2026. CountAPI (https://countapi.mileshilliard.com/) stores the shared public totals. Visits count once per tab session using sessionStorage; refreshing that tab reads the total without incrementing it again. Clicking an APK or Windows installer link on the landing page increments the combined download-click total. Source downloads, browser previews, direct file URLs, and in-app updates are excluded. These are approximate activity counts, not unique people, completed downloads, or installs. They do not reconstruct historical traffic.
+
+The counters send no note text, account credentials, or visitor identifiers. Only the fixed public counter key is sent to the service, which receives the normal network request. Requests omit cookies and referrers. The page shows a dash if the counter service is unavailable, and downloads continue normally. Public counters can be changed by anyone who knows the key; they are not an authoritative audit log.
